@@ -1,0 +1,383 @@
+/*
+ * Copyright (C) 2011-2019 Intel Corporation. All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ *   * Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in
+ *     the documentation and/or other materials provided with the
+ *     distribution.
+ *   * Neither the name of Intel Corporation nor the names of its
+ *     contributors may be used to endorse or promote products derived
+ *     from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ */
+
+/* Enclave.edl - Top EDL file. */
+
+enclave {
+    from "sgx_tstdc.edl" import *;
+    include "stdbool.h"
+
+    // define ECALLs
+    trusted {
+
+        public int ecall_merge_and_print_string(
+            [in, string] char* s1,
+            [in, string] char* s2
+        );
+
+        public int ecall_setup_env(
+            int num_partitions_
+        );
+
+        public int ecall_read_file(
+            int global_id,
+            int local_id,
+            [in, count=file_length] uint8_t *file, 
+            size_t file_length
+        );
+
+        public int ecall_print(
+            int global_id,
+            int local_id,
+            int limit_size, 
+            bool show_dummy
+        );
+
+        public int ecall_copy(
+            int global_id,
+            int local_id,
+            int new_global_id
+        );
+
+        public int ecall_shuffleByKey(
+            int global_id,
+            int local_id,
+            int num_partitions,
+            [in, count=key_size] int *key_data, 
+            size_t key_size,
+            int seed,
+            int size_bound
+        );
+
+        public int ecall_shuffleByCol(
+            int global_id,
+            int local_id,
+            int num_partitions, 
+            int i_col_id,
+            int shuffle_by_col_padding_size);
+
+        public int ecall_randomShuffle(
+            int global_id,
+            int local_id,
+            int num_partitions
+        );
+
+        public int ecall_shuffleMerge(
+            int global_id,
+            int local_id,
+            int num_partitions
+        );
+
+        public int ecall_groupByAggregateBase(
+            int global_id,
+            int local_id,
+            [user_check] void *op,
+            bool doPrefix, 
+            int phase,
+            bool reverse
+        );
+
+        public int ecall_addValueByKey(
+            int global_id,
+            int local_id,
+            [user_check] void *op
+        );
+
+        public int ecall_getPivots(
+            int global_id,
+            int local_id,
+            [in, count=columns_size] int *columns_datas, 
+            size_t columns_size
+        );
+
+        public long long ecall_sum(
+            int global_id,
+            int local_id,
+            int column
+        );
+
+        public int ecall_mvJoinColsAhead(
+            int global_id,
+            int local_id,
+            [in, count=columns_size] int *columns_datas, 
+            size_t columns_size
+        );
+
+        public int ecall_partitionByPivots(
+            int global_id,
+            int local_id,
+            [in, count=columns_size] int *columns_datas, 
+            size_t columns_size,
+            int size_bound
+        );
+
+        public int ecall_sortMerge(
+            int global_id,
+            int local_id,
+            [in, count=columns_size] int *columns_datas, 
+            size_t columns_size
+        );
+
+        public int ecall_localSort(
+            int global_id,
+            int local_id,
+            [in, count=columns_size] int *columns_datas, 
+            size_t columns_size
+        );
+
+        public int ecall_pad_to_size(
+            int global_id,
+            int local_id,
+            int n
+        );
+
+        public int ecall_opaque_prepare_shuffle_col(
+            int global_id,
+            int local_id,
+            int col_id,
+            int tuple_num
+        );
+
+
+        public int ecall_foreignTableModifyColZ(
+            int global_id,
+            int local_id,
+            [in, count=columns_size] int *columns_datas, 
+            size_t columns_size
+        );
+
+        public int ecall_finalizePkjoinResult(
+            int global_id,
+            int local_id,
+            [in, count=columns_size] int *columns_datas, 
+            size_t columns_size, 
+            int ori_r_col_num,
+            int r_align_col_num
+        );
+
+        public int ecall_pkJoinCombine(
+            int global_id,
+            int local_id,
+            int s_table_global_id,
+            int s_table_local_id,
+            int ori_r_col_num, 
+            int r_align_col_num,
+            [in, count=combine_sort_cols_size] int *combine_sort_cols_data, 
+            size_t combine_sort_cols_size,
+            [in, count=join_cols_size] int *join_cols_data, 
+            size_t join_cols_size
+        );
+
+        public int ecall_joinComputeAlignment(
+            int global_id,
+            int local_id,
+            int m
+        );
+        
+        public int ecall_joinFinalCombine(
+            int global_id,
+            int local_id,
+            int r_table_global_id,
+            int num_join_cols
+        );
+
+        public int ecall_addCol(
+            int global_id,
+            int local_id,
+            int defaultVal,
+            int col_index
+        );
+
+        public int ecall_copyCol(
+            int global_id,
+            int local_id,
+            int col_index
+        );
+
+        public int ecall_expansion_prepare(
+            int global_id,
+            int local_id,
+            int d_index
+        );
+
+        public int ecall_add_and_calculate_col_t_p(
+            int global_id,
+            int local_id,
+            int d_index,
+            int m
+        );
+
+        public int ecall_expansion_suffix_sum(
+            int global_id,
+            int local_id,
+            int phase
+        );
+
+        public int ecall_expansion_distribute_and_clear(
+            int global_id,
+            int local_id,
+            int m
+        );
+
+
+        public int ecall_deleteCol(
+            int global_id,
+            int local_id,
+            int col_index
+        );
+
+        public int ecall_size(
+            int global_id,
+            int local_id
+        );
+
+        public int ecall_destroy(
+            int global_id,
+            int num_partitions
+        );
+
+        public int ecall_num_columns(
+            int global_id,
+            int local_id
+        );
+
+        public int ecall_max(
+            int global_id,
+            int local_id,
+            int column
+        );
+
+        public int ecall_union(
+            int global_id,
+            int local_id,
+            int other_table_global_id,
+            int other_table_local_id
+        );
+
+        public long long ecall_SODA_step1(
+            int global_id,
+            int local_id,
+            [in, count=columns_size] int *columns_datas, 
+            size_t columns_size,
+            int aggCol
+        );
+
+        public int ecall_SODA_step2(
+            int global_id,
+            int local_id,
+            int p
+        );
+
+        public int ecall_SODA_step3(
+            int global_id,
+            int local_id,
+            int p
+        );
+
+        public int ecall_localJoin(
+            int global_id,
+            int local_id,
+            int other_table_global_id,
+            int other_table_local_id,
+            int col_num,
+            int output_size
+        );
+
+        public int ecall_SODA_step5(
+            int global_id,
+            int local_id
+        );
+
+
+        public int ecall_assignColE(
+            int global_id,
+            int local_id,
+            int col
+        );
+
+        public int ecall_remove_dup_after_prefix(
+            int global_id,
+            int local_id,
+            [in, count=columns_size] int *columns_datas, 
+            size_t columns_size
+        );
+        
+        public int ecall_project(
+            int global_id,
+            int local_id,
+            [in, count=columns_size] int *columns_datas, 
+            size_t columns_size
+        );
+
+        public int ecall_generateData( 
+            int global_id,
+            int local_id,
+            int num_cols, 
+            int num_rows
+        );        
+        
+        public int ecall_soda_shuffleByKey( 
+            int global_id,
+            int local_id,
+            int num_partitions,
+            [in, count=columns_size] int *columns_datas, 
+            size_t columns_size,
+            int seed,
+            int size_bound
+        );
+    };
+
+    // define OCALLs
+    untrusted {
+        int ocall_print_msg(
+            [in, size=len] const char* str,
+            size_t len
+        ) transition_using_threads;
+        void ocall_log(int level,
+            [in, string] const char *file, int line,
+            [in, string] const char *msg
+        ) transition_using_threads;
+
+        void ocall_print_string([in, string] const char *str) transition_using_threads;
+
+        void ocall_write_file([in, string] const char *file_name, [user_check] char *content, size_t length, int row_num, int global_id, int source_local_id, int target_local_id);
+
+        void* ocall_read_file([in, string] const char* file_name);
+
+        void ocall_record_time_start([in, string] const char* log, int uniq_counter, int global_id, int local_id);
+        void ocall_record_time_end([in, string] const char* log, int uniq_counter, int global_id, int local_id);
+
+        
+        void unsafe_ocall_malloc(size_t size, [out] char **ret);
+        void ocall_free([user_check] char *buf);
+
+    };
+};

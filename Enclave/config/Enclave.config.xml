@@ -1,0 +1,14 @@
+<!-- The default HeapMaxSize (0x40000000) is 1GB -->
+<!-- The default StackMaxSize (0x4000000) is 64MB -->
+
+<EnclaveConfiguration>
+  <ProdID>0</ProdID>
+  <ISVSVN>0</ISVSVN>
+  <StackMaxSize>0x8000000</StackMaxSize>
+  <HeapMaxSize>0x10000000</HeapMaxSize>
+  <TCSNum>10</TCSNum>
+  <TCSPolicy>1</TCSPolicy>
+  <DisableDebug>0</DisableDebug>
+  <MiscSelect>0</MiscSelect>
+  <MiscMask>0xFFFFFFFF</MiscMask>
+</EnclaveConfiguration>
