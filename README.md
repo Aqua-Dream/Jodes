@@ -1,5 +1,5 @@
 # Jodes: Efficient Oblivious Join in the Distributed Setting
-See full version at [Jodes_full.pdf](Jodes_full.pdf).
+[paper](https://arxiv.org/abs/2501.09334)
 
 ## Building
 See [BUILDING.md](BUILDING.md)
